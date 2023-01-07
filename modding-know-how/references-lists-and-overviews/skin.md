@@ -6,7 +6,6 @@ description: Skin tones, complexions, make-up
 
 ## Skin tones by index
 
-|    |                               |
 | -- | ----------------------------- |
 | 1  | 01\_ca\_pale                  |
 | 2  | 01\_ca\_pale\_00\_warm\_ivory |
@@ -31,9 +30,11 @@ For a list of freckles and make-up sorted by colour and skin type, see NoraLee's
 
 Lipstick colours and styles are sorted in (more or less) ascending order in the appearance list in the mesh.&#x20;
 
-Style order is Default - Glossy - Matte (no suffix, \_02_, \__03)
+Style order is Default - Glossy - Matte (no suffix, \_02_, \_03). 
 
 <figure><img src="https://i.imgur.com/P5NMggv.png" alt=""><figcaption></figcaption></figure>
+
+The ``appearanceName`` in WolvenKit would appear as ``color_type_property``. An example would be ``pastel_pink_12_02``, giving glossy pastel pink lined lips.
 
 ## Eyeliner and kohl
 
