@@ -1,6 +1,5 @@
 ---
-description: Tutorial for gonks
-cover: ../../../../../.gitbook/assets/merchants_of_death_ultrawide.png
+description: How to: Creating an iconic weapon
 coverY: 46
 layout:
   cover:
@@ -18,14 +17,14 @@ layout:
     visible: true
 ---
 
-# ☠ New Iconic Weapon: Step by Step
+# How to: Creating an iconic weapon
 
 ## Summary
 
 Published: December 2023 by destinybu\
-Last documented edit: Feb 07 2024 by [manavortex](https://app.gitbook.com/u/NfZBoxGegfUqB33J9HXuCs6PVaC3 "mention")
+Last documented edit: February 18, 2023 by apart\
 
-We'll be making a fully featured new Iconic weapon in this guide, which is designed for first-timers and goes into details into every aspect about weapon modding. (not appearances)
+The purpose of this guide is to help you start creating the iconic weapon you have been dreaming of owning in Cyberpunk 2077.
 
 #### Wait, this is not what I want!
 
@@ -37,12 +36,13 @@ We'll be making a fully featured new Iconic weapon in this guide, which is desig
 
 Before beginning, ensure you have the following software installed and properly set up:
 
-1. **WolvenKit (8.12+)** - [Installed & Setup](https://app.gitbook.com/s/-MP\_ozZVx2gRZUPXkd4r/getting-started/download)
-2. **MLSB (MultiLayerSetupBuilder 1.6.7+)** - [Installed & Setup](../../../../modding-tools/mlsetup-builder/#installation)
-3. **A text editor:** [Notepad++](https://notepad-plus-plus.org/downloads/) or, if you want to get fancy, [Visual Studio Code](https://app.gitbook.com/s/-McniwB8YOK2HnJ7SYg\_/getting-started)
-4. **Cyberpunk 2077** - 😑
-5. Core mods: [ArchiveXL](https://www.nexusmods.com/cyberpunk2077/mods/4198), [TweakXL](https://www.nexusmods.com/cyberpunk2077/mods/4197), [Red4Ext](https://www.nexusmods.com/cyberpunk2077/mods/2380)
-6. Optional: [RedHotTools](https://github.com/psiberx/cp2077-red-hot-tools/releases/), [RedMod](../../../../../for-mod-users/users-modding-cyberpunk-2077/redmod/)
+1. [WolvenKit](https://github.com/WolvenKit/WolvenKit) (8.12+) (Recommended: [Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases) for latest updates)
+2. A code editor ([Notepad++](https://notepad-plus-plus.org/downloads/) or [Visual Studio Code](https://code.visualstudio.com/Download))
+3. A copy of [Cyberpunk 2077](https://www.cyberpunk.net/buy)
+4. [RED4ext](https://github.com/WopsS/RED4ext/)
+5. [Archive XL](https://github.com/psiberx/cp2077-archive-xl)
+6. [Tweak XL](https://github.com/psiberx/cp2077-tweak-xl)
+7. [Cyber Engine Tweaks](https://github.com/maximegmd/CyberEngineTweaks)
 
 If you are stuck, refer to the [#troubleshooting-check-this-when-youre-stuck](new-iconic-weapon-tutorial-for-dummies.md#troubleshooting-check-this-when-youre-stuck "mention") at the end of the page.
 
@@ -310,8 +310,6 @@ rate(cycle time), mag size, smart range
   hide_nametag: True
 </code></pre>
 
-
-
 </details>
 
 ## Step 4: Making a new weapon
@@ -323,7 +321,7 @@ Making a new weapon is fairly simple. In your tweak file, change the Item ID in 
 {% code lineNumbers="true" %}
 ```yaml
 Items.Preset_Unity_Default: -> Remove this
-Items.Hand_Of_Midas: -> Add this
+Items.destinybu_Hand_Of_Midas: -> Add this
 ```
 {% endcode %}
 
@@ -338,7 +336,7 @@ Now open up the CET [Console](https://app.gitbook.com/s/-MP5jWcLZLbbbzO-\_ua1-88
 Type in the command below and hit Enter.
 
 ```
- Game.AddToInventory("Items.Hand_Of_Midas",1)
+ Game.AddToInventory("Items.destinybu_Hand_Of_Midas",1)
 ```
 
 <figure><img src="../../../../../.gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption><p>Your newly created weapon is now in game.</p></figcaption></figure>
@@ -365,7 +363,7 @@ Now hot reload your game (Insert how to link here) or close it, reinstall your m
 Spawn in both the Unity & Hand of Midas using the CET console:
 
 ```
-Game.AddToInventory("Items.Hand_Of_Midas",1)
+Game.AddToInventory("Items.destinybu_Hand_Of_Midas",1)
 Game.AddToInventory("Items.Preset_Unity_Default",1)
 ```
 
@@ -379,7 +377,7 @@ You should now be able to see that both the Unity & Hand Of Midas, although othe
 
 How do we know that it's called "Crosshairs.Tech\_Round" ?&#x20;
 
-#### Method 1: The REDmod DLC
+#### Method 1: REDmod DLC
 
 If you have the REDmod DLC installed, you can use a text editor like Notepad++ to do a full-text search under `Cyberpunk 2077/tools/REDmod`. By searching for `crosshair:`, you can find all value assignments in the game files.
 
@@ -391,7 +389,7 @@ By searching for "Crosshairs." in the Tweak Browser. Most things we find inside 
 
 Editing the Tweak will allow us to modify all of our gun's behaviors, and I encourage you to play around with these.
 
-## Step 5: Removing redundant code
+## Step 5: Code Optimization
 
 We're only changing a single property in the Hand of Midas. For that, we have a tweak file with more than 200 lines of code. Can't we do this in a better way?
 
@@ -404,28 +402,32 @@ In later steps of this guide, you'll need to look up properties. Either keep a c
 ### Using $base instead of $type
 
 ```yaml
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   $base: Items.Preset_Unity_Default
   Just the properties we want to edit ...
-
+```
 OR
-
-Items.Hand_Of_Midas:
+```yaml
+Items.destinybu_Hand_Of_Midas:
   $type: gamedataWeaponItem_Record
   All the other properties ...
 ```
+
+{% hint style="info" %}
+When creating tweak records, append a prefix to your items, so that you can easily search for them in the Cyber Engine Tweaks tweak browser! Example: ``Items.destinybu_Hand_Of_Midas``
+{% endhint %}
 
 As shown above, when using `$type` to define a tweak, we need to add all the required properties for the type, but when using $base to define one, we only need to add the properties we are changing, the rest are taken from the parent.
 
 Now go ahead and change it so we use a `$base` & only define the crosshair. Your entire tweak should now look like this:
 
 ```yaml
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   $base: Items.Preset_Unity_Default
   crosshair: Crosshairs.Tech_Round
 ```
 
-## Step 6: The personal touch
+## Step 6: Personal touch
 
 What good is a new gun without a new name? We need to tell our game about these.
 
@@ -492,16 +494,12 @@ Next, revisit your "hand\_of\_midas" tweak file to establish the weapon's name a
 Add the following lines under the existing properties:
 
 ```yaml
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   $base: Items.Preset_Unity_Default
   crosshair: Crosshairs.Tech_Round
-  displayName: MC_gun_name
-  localizedDescription: MC_gun_description
+  displayName: LocKey#MC_gun_name
+  localizedDescription: LocKey#MC_gun_description
 ```
-
-{% hint style="info" %}
-Instead of `displayName: MC_gun_name`, you can also write `displayName: LocKey#MC_gun_name`. However, TweakXL will do this for you!
-{% endhint %}
 
 These lines set the display name and the description of your weapon using the keys defined in your localization file. The **values** on the right side of the `:` must match the `secondaryKey` values from your `en-us.json` file and be **globally unique**.
 
@@ -509,23 +507,23 @@ After completing these steps, install your mod and launch the game. Your new wea
 
 <figure><img src="../../../../../.gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption><p>Name &#x26; Description of the gun are now taken from "en-us.json" that we've created</p></figcaption></figure>
 
-## Step 7: Make it Iconic
+## Step 7: Making the weapon Iconic
 
 To elevate the 'Hand of Midas' to its iconic status, we need to modify the `.yaml` again, where we set all of the gun's unique features:
 
 ```yaml
 # Hand of Midas weapon tweak
-Items.Hand_Of_Midas:
-  $base: Items.Preset_Unity_Default # $base makes it so all the properties are taken from the specified tweak (in this case, "Items.Preset_Unity_Default") and the properties specified in this tweak overwrite the parent.
-  crosshair: Crosshairs.Tech_Round # other crosshairs can be found by looking for "Crosshairs." in Tweak Browser
-  displayName: MC_gun_name # name of the gun (will be fetched from "LocKey#MC_gun_name" secondary key in "en-us.json")
-  localizedDescription: MC_gun_description # description of the gun (can be seen when previewing the gun from inventory with "V" key)
+Items.destinybu_Hand_Of_Midas:
+  $base: Items.Preset_Unity_Default
+  crosshair: Crosshairs.Tech_Round
+  displayName: LocKey#MC_gun_name
+  localizedDescription: LocKey#MC_gun_description
   tags:
-    - !append-once IconicWeapon # prevent the gun from being dissassembled
-  statModifiers: # stats for a weapon - reload time/aim speed/magazine size/recoil kick/damage per second/etc.
+    - !append-once IconicWeapon # prevent the gun from being dissassembled, dropped, and accidentally vendored
+  statModifiers:
     - !append-once Quality.IconicItem # makes the weapon iconic
-  statModifierGroups: # stats for a weapon also, but grouped (generally by category)
-    - !append-once Items.IconicQualityRandomization
+  statModifierGroups:
+    - !append-once Items.IconicQualityRandomization # allows the weapon to be upgraded using Crafting Materials
 ```
 
 The new things you're seeing are `arrays`, which is a technical term — you can think of them as lists, since they can hold multiple items.
@@ -554,7 +552,7 @@ We make sure that the weapon updates correctly by setting the&#x20;
 
 What exactly it does is somewhat of a mystery, so let me know if you find out.
 
-#### Go test
+#### Testing
 
 Once these modifications are in place, install your mod and enjoy the newfound Iconic status of the 'Hand of Midas' in the game.
 
@@ -562,7 +560,7 @@ Once these modifications are in place, install your mod and enjoy the newfound I
 
 Technically, you've already made a new Iconic weapon & I should call quits on this tutorial, but it's never as easy as that, is it? Give yourself a pat on the back & onto the next step.
 
-## Step 8: Audio - Gun Go Boom
+## Step 8: Audio
 
 Let's talk theme.
 
@@ -578,13 +576,13 @@ Now add this value to your weapon tweak as shown below.
 
 ```yaml
 # Hand of Midas weapon tweak
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   $base: Items.Preset_Unity_Default # $base makes it so all the properties are taken from the specified tweak (in this case, "Items.Preset_Unity_Default") and the properties specified in this tweak overwrite the parent.
   crosshair: Crosshairs.Tech_Round # other crosshairs can be found by looking for "Crosshairs." in Tweak Browser
   tags:
     - !append-once IconicWeapon # prevent the gun from being dissassembled
-  displayName: MC_gun_name # name of the gun (will be fetched from "LocKey#MC_gun_name" secondary key in "en-us.json")
-  localizedDescription: MC_gun_description # description of the gun (can be seen when previewing the gun from inventory with "V" key)
+  displayName: LocKey#MC_gun_name # name of the gun (will be fetched from "LocKey#MC_gun_name" secondary key in "en-us.json")
+  localizedDescription: LocKey#MC_gun_description
   statModifiers: # stats for a weapon - reload time/aim speed/magazine size/recoil kick/damage per second/etc.
     - !append-once Quality.IconicItem # makes the weapon iconic
   audioName: wea_set_liberty_dex -> add this
@@ -650,7 +648,7 @@ To change the gun's recoil, we'll add a new `statModifierGroup` tweak as shown b
 
 ```yaml
 # Recoil related stats for Hand of Midas
-StatGroups.Hand_Of_Midas_Recoil_Stats:
+Items.destinybu_Hand_Of_Midas_Recoil_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -675,19 +673,19 @@ Now add this stat group to your weapon's tweak (see the last line).
 
 ```yaml
 # Hand of Midas weapon tweak
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   $base: Items.Preset_Unity_Default # $base makes it so all the properties are taken from the specified tweak (in this case, "Items.Preset_Unity_Default") and the properties specified in this tweak overwrite the parent.
   crosshair: Crosshairs.Tech_Round # other crosshairs can be found by looking for "Crosshairs." in Tweak Browser
   tags:
     - !append-once IconicWeapon # prevent the gun from being dissassembled
-  displayName: MC_gun_name # name of the gun (will be fetched from "LocKey#MC_gun_name" secondary key in "en-us.json")
-  localizedDescription: MC_gun_description # description of the gun (can be seen when previewing the gun from inventory with "V" key)
+  displayName: LocKey#MC_gun_name # name of the gun (will be fetched from "MC_gun_name" secondary key in "en-us.json")
+  localizedDescription: LocKey#MC_gun_description # description of the gun (can be seen when previewing the gun from inventory with "V" key)
   statModifiers: # stats for a weapon - reload time/aim speed/magazine size/recoil kick/damage per second/etc.
     - !append-once Quality.IconicItem # makes the weapon iconic
   audioName: wea_set_liberty_dex # sets the sounds of Dex's gun - Plan B
   statModifierGroups: # stats for a weapon also, but grouped (generally by category)
     - !append-once Items.IconicQualityRandomization
-    - !append-once StatGroups.Hand_Of_Midas_Recoil_Stats -> add this
+    - !append-once Items.destinybu_Hand_Of_Midas_Recoil_Stats -> add this
 ```
 
 Install your mod, launch the game and test your changes. You should see that the gun's recoil is increased, but doesn't feel overwhelming.
@@ -708,28 +706,28 @@ After a bit of tinkering, this is what my weapon tweak now looks like (expand th
 
 ```yaml
 # Hand of Midas weapon tweak
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   $base: Items.Preset_Unity_Default # $base makes it so all the properties are taken from the specified tweak (in this case, "Items.Preset_Unity_Default") and the properties specified in this tweak overwrite the parent.
   crosshair: Crosshairs.Tech_Round # other crosshairs can be found by looking for "Crosshairs." in Tweak Browser
   tags:
   - !append-once IconicWeapon # prevent the gun from being dissassembled
-  displayName: MC_gun_name # name of the gun (will be fetched from "LocKey#MC_gun_name" secondary key in "en-us.json")
-  localizedDescription: MC_gun_description # description of the gun (can be seen when previewing the gun from inventory with "V" key)
+  displayName: LocKey#MC_gun_name # name of the gun (will be fetched from "MC_gun_name" secondary key in "en-us.json")
+  localizedDescription: LocKey#MC_gun_description # description of the gun (can be seen when previewing the gun from inventory with "V" key)
   statModifiers: # stats for a weapon - reload time/aim speed/magazine size/recoil kick/damage per second/etc.
   - !append-once Quality.IconicItem # makes the weapon iconic
   audioName: wea_set_liberty_dex # sets the sounds of Dex's gun - Plan B
   statModifierGroups: # stats for a weapon also, but grouped (generally by category)
-  - !append-once Items.IconicQualityRandomization
-  - !append-once StatGroups.Hand_Of_Midas_Recoil_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Technical_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Handling_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Aim_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Range_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Damage_Stats
   - !remove Items.Base_Unity_Technical_Stats
+  - !append-once Items.IconicQualityRandomization
+  - !append-once Items.destinybu_Hand_Of_Midas_Recoil_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Technical_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Handling_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Aim_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Range_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Damage_Stats
 
 # Damage stats for Hand of Midas 
-StatGroups.Hand_Of_Midas_Damage_Stats:
+Items.destinybu_Hand_Of_Midas_Damage_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: ConstantStatModifier
@@ -746,7 +744,7 @@ StatGroups.Hand_Of_Midas_Damage_Stats:
     statType: BaseStats.HeadshotCritChance # crit change on headshots
 
 # Range stats for Hand of Midas 
-StatGroups.Hand_Of_Midas_Range_Stats:
+Items.destinybu_Hand_Of_Midas_Range_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -759,7 +757,7 @@ StatGroups.Hand_Of_Midas_Range_Stats:
     statType: BaseStats.MaximumRange # range beyond which bullet will despawn
 
 # Magazine capacity for Hand of Midas
-StatGroups.Hand_Of_Midas_Technical_Stats:
+Items.destinybu_Hand_Of_Midas_Technical_Stats:
   $base: Items.Base_Unity_Technical_Stats
   statModifiers:
   - !append-once 
@@ -770,7 +768,7 @@ StatGroups.Hand_Of_Midas_Technical_Stats:
   - !remove Items.Base_Unity_Technical_Stats_inline2 # remove stat setting the magazine capacity
 
 # Reload related stats for Hand of Midas
-StatGroups.Hand_Of_Midas_Handling_Stats:
+Items.destinybu_Hand_Of_Midas_Handling_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -783,7 +781,7 @@ StatGroups.Hand_Of_Midas_Handling_Stats:
     statType: BaseStats.EmptyReloadTime # reload time when magazine is empty
 
 # Aim/Zoom related stats for Hand of Midas
-StatGroups.Hand_Of_Midas_Aim_Stats:
+Items.destinybu_Hand_Of_Midas_Aim_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -796,7 +794,7 @@ StatGroups.Hand_Of_Midas_Aim_Stats:
     statType: BaseStats.AimFOV # FOV when aiming (Illusion of zoom)
 
 # Recoil related stats for Hand of Midas
-StatGroups.Hand_Of_Midas_Recoil_Stats:
+Items.destinybu_Hand_Of_Midas_Recoil_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -833,14 +831,14 @@ There are a lot of values to play around with in a tweak file. You are often bet
 2.  Item Quality
 
     ```yaml
-    Items.Hand_Of_Midas:
+    Items.destinybu_Hand_Of_Midas:
       ...  
       quality: Quality.Rare # minimum item quality
     ```
 3.  Buy & Sell Price
 
     ```yaml
-    Items.Hand_Of_Midas:
+    Items.destinybu_Hand_Of_Midas:
       ...
       buyPrice: # multipliers to decide the buy price of the gun
       - Price.Hand_Of_Midas
@@ -975,7 +973,7 @@ Now we can finally add the mod to the weapon by adding it to the `slotPartListPr
 
 ```yaml
 # Hand of Midas weapon tweak
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   # your other properties - cut out for readability
   slotPartListPreset: # attachments & mods 
   - !append-once
@@ -992,7 +990,7 @@ Everything hangs together now, let's see if it works.
 
 ```yaml
 # Hand of Midas weapon tweak
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   ...
   slotPartListPreset: # attachments & mods 
   - !append-once
@@ -1178,24 +1176,24 @@ We've done a lot so far, so I'll leave all our changes here:
 
 ```yaml
 # Hand of Midas weapon tweak
-Items.Hand_Of_Midas:
+Items.destinybu_Hand_Of_Midas:
   $base: Items.Preset_Unity_Default # $base makes it so all the properties are taken from the specified tweak (in this case, "Items.Preset_Unity_Default") and the properties specified in this tweak overwrite the parent.
   crosshair: Crosshairs.Tech_Round # other crosshairs can be found by looking for "Crosshairs." in Tweak Browser
   tags:
   - !append-once IconicWeapon # prevent the gun from being dissassembled
-  displayName: LocKey#MC_gun_name # name of the gun (will be fetched from "LocKey#MC_gun_name" secondary key in "en-us.json")
+  displayName: LocKey#MC_gun_name # name of the gun (will be fetched from "MC_gun_name" secondary key in "en-us.json")
   localizedDescription: LocKey#MC_gun_description # description of the gun (can be seen when previewing the gun from inventory with "V" key)
   statModifiers: # stats for a weapon - reload time/aim speed/magazine size/recoil kick/damage per second/etc.
   - !append-once Quality.IconicItem # makes the weapon iconic
   audioName: wea_set_liberty_dex # sets the sounds of Dex's gun - Plan B
   statModifierGroups: # stats for a weapon also, but grouped (generally by category)
   - !append-once Items.IconicQualityRandomization
-  - !append-once StatGroups.Hand_Of_Midas_Recoil_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Technical_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Handling_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Aim_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Range_Stats
-  - !append-once StatGroups.Hand_Of_Midas_Damage_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Recoil_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Technical_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Handling_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Aim_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Range_Stats
+  - !append-once Items.destinybu_Hand_Of_Midas_Damage_Stats
   - !remove Items.Base_Unity_Technical_Stats
   buyPrice: # multipliers to decide the buy price of the gun
   - Price.Hand_Of_Midas
@@ -1208,7 +1206,7 @@ Items.Hand_Of_Midas:
   slotPartListPreset: # attachments & mods 
   - !append-once
     $type: SlotItemPartPreset
-    itemPartPreset: Items.Cranial_Cashback_Mod # iconic mod
+    itemPartPreset: Items.destinybu_Cranial_Cashback_Mod # iconic mod
     slot: AttachmentSlots.IconicWeaponModLegendary 
 
 # Static price for Hand of Midas
@@ -1219,7 +1217,7 @@ Price.Hand_Of_Midas:
   statType: BaseStats.Price
 
 # Damage stats for Hand of Midas 
-StatGroups.Hand_Of_Midas_Damage_Stats:
+Items.destinybu_Hand_Of_Midas_Damage_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: ConstantStatModifier
@@ -1236,7 +1234,7 @@ StatGroups.Hand_Of_Midas_Damage_Stats:
     statType: BaseStats.HeadshotCritChance # crit change on headshots
 
 # Range stats for Hand of Midas 
-StatGroups.Hand_Of_Midas_Range_Stats:
+Items.destinybu_Hand_Of_Midas_Range_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -1249,7 +1247,7 @@ StatGroups.Hand_Of_Midas_Range_Stats:
     statType: BaseStats.MaximumRange # range beyond which bullet will despawn
 
 # Magazine capacity for Hand of Midas
-StatGroups.Hand_Of_Midas_Technical_Stats:
+Items.destinybu_Hand_Of_Midas_Technical_Stats:
   $base: Items.Base_Unity_Technical_Stats
   statModifiers:
   - !append-once 
@@ -1260,7 +1258,7 @@ StatGroups.Hand_Of_Midas_Technical_Stats:
   - !remove Items.Base_Unity_Technical_Stats_inline2 # remove stat setting the magazine capacity
 
 # Reload related stats for Hand of Midas
-StatGroups.Hand_Of_Midas_Handling_Stats:
+Items.destinybu_Hand_Of_Midas_Handling_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -1273,7 +1271,7 @@ StatGroups.Hand_Of_Midas_Handling_Stats:
     statType: BaseStats.EmptyReloadTime # reload time when magazine is empty
 
 # Aim/Zoom related stats for Hand of Midas
-StatGroups.Hand_Of_Midas_Aim_Stats:
+Items.destinybu_Hand_Of_Midas_Aim_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -1286,7 +1284,7 @@ StatGroups.Hand_Of_Midas_Aim_Stats:
     statType: BaseStats.AimFOV # FOV when aiming (Illusion of zoom)
 
 # Recoil related stats for Hand of Midas
-StatGroups.Hand_Of_Midas_Recoil_Stats:
+Items.destinybu_Hand_Of_Midas_Recoil_Stats:
   $type: gamedataStatModifierGroup_Record
   statModifiers:
   - $type: gamedataConstantStatModifier_Record
@@ -1307,13 +1305,13 @@ StatGroups.Hand_Of_Midas_Recoil_Stats:
     statType: BaseStats.RecoilRecoveryTime # time taken to return to normal position after recoil
 
 # Hand of Midas Iconic mod
-Items.Cranial_Cashback_Mod:
+Items.destinybu_Cranial_Cashback_Mod:
   $base: Items.IconicWeaponModBase
   OnAttach: 
   - Items.Cranial_Cashback
 
 # Hand of Midas Iconic mod ability
-Items.Cranial_Cashback:
+Items.destinybu_Cranial_Cashback:
   $base: Items.IconicWeaponModAbilityBase
   effectors:
   - !append-once Effectors.Heal_On_Headshot
@@ -1395,8 +1393,6 @@ Prereqs.Is_Weapon_Ranged:
   weaponType: Ranged
 ```
 
-
-
 </details>
 
 #### Test it!
@@ -1422,7 +1418,7 @@ You've created/modified a tweak but it doesn't show effect in game, what next?
 * Open the CET Console in game search for your Tweak in the [Tweak Browser](https://app.gitbook.com/s/-MP5jWcLZLbbbzO-\_ua1-887967055/console/usage-1). If your tweak doesn't show, there's a validation error in the tweak.
 * Validate your .yaml tweaks [here ](https://www.yamllint.com/)to check for errors.
 * Open `Cyberpunk 2077\red4ext\plugins\TweakXL\TweakXL.log` and look for any error messages towards the end, this can help when TweakXL has issues loading a tweak.
-*   Check for other mods with same Tweak/Archive names.&#x20;
+* Check for other mods with same Tweak/Archive names.&#x20;
 
     Tweak Folder - `Cyberpunk 2077\r6\tweaks`
 
